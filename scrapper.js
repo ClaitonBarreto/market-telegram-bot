@@ -7,7 +7,7 @@ let scrapper = async () => {
 
     const browser = await puppeteer.launch({
         headless: false,
-        product: 'chrome'
+        product: 'firefox'
     })
 
     const page = await browser.newPage()

@@ -1,0 +1,11 @@
+{
+  "name": "webscrapper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "excel4node": "^1.7.2",
+    "puppeteer": "^5.2.1"
+  }
+}

@@ -2,6 +2,7 @@ import puppeteer from 'puppeteer'
 import xl from 'excel4node'
 
 const url = 'https://www.amazon.com.br/s?k=iphone&__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss_2'
+const testUrl = 'https://www.amazon.com.br'
 
 let scrapper = async () => {
 
@@ -11,13 +12,35 @@ let scrapper = async () => {
     })
 
     const page = await browser.newPage()
-    await page.goto(url)
+    await page.goto(testUrl)
+    
+    searchInPage(page, 'iphone')
+
+    // const result = await getResultFromPage(newPage)
+
+    //browser.close()
+    // return result
+}
+
+const searchInPage = async (page, text) => {
+    await page.focus('#twotabsearchtextbox')
+    await page.keyboard.type(text)
+    await page.keyboard.press("Enter")
+
+    page.once('load', async () => {
+        const result = await getResultFromPage(page)
+
+        console.log(result)
+    })
+}
+
+const getResultFromPage = async (page) => {
     
     const result = await page.evaluate(() => {
         const products = []
         document.querySelectorAll('div > span > div > div.a-spacing-medium')
         .forEach((product) => {
-            
+
             var productArray = []
 
             let name = product.children[2].innerText
@@ -46,42 +69,40 @@ let scrapper = async () => {
         return products
     })
 
-
-    browser.close()
     return result
-}
+}   
 
 scrapper().then((result) => {
     
-    var headers = ["Nome do Produto", "Valor do Produto"]
+    // var headers = ["Nome do Produto", "Valor do Produto"]
 
-    var wb = new xl.Workbook()
+    // var wb = new xl.Workbook()
 
-    var ws = wb.addWorksheet('Resultado de busca')
+    // var ws = wb.addWorksheet('Resultado de busca')
 
-    var tabStyle = wb.createStyle({
-        font: {
-            color: '#000000',
-        },
-        numberFormat: '$#,##0.00; ($#,##0.00); -',
-    });
+    // var tabStyle = wb.createStyle({
+    //     font: {
+    //         color: '#000000',
+    //     },
+    //     numberFormat: '$#,##0.00; ($#,##0.00); -',
+    // });
 
-    var headerStyle = wb.createStyle({
-        font: {
-            color: '#000000',
-            bold: true
-        },
-        numberFormat: '$#,##0.00; ($#,##0.00); -',
-    });
+    // var headerStyle = wb.createStyle({
+    //     font: {
+    //         color: '#000000',
+    //         bold: true
+    //     },
+    //     numberFormat: '$#,##0.00; ($#,##0.00); -',
+    // });
 
-    ws.cell(1,1).string(headers[0]).style(headerStyle)
-    ws.cell(1,2).string(headers[1]).style(headerStyle)
+    // ws.cell(1,1).string(headers[0]).style(headerStyle)
+    // ws.cell(1,2).string(headers[1]).style(headerStyle)
 
-    result.map((line, key) => {
-        ws.cell(key+2, 1).string(line[0]).style(tabStyle)
-        ws.cell(key+2, 2).string(line[1]).style(tabStyle)
-    })
+    // result.map((line, key) => {
+    //     ws.cell(key+2, 1).string(line[0]).style(tabStyle)
+    //     ws.cell(key+2, 2).string(line[1]).style(tabStyle)
+    // })
 
-    wb.write('Teste.xls')
+    // wb.write('Teste.xls')
 
 })

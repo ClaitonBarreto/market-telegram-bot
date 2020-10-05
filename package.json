@@ -4,8 +4,16 @@
   "main": "index.js",
   "license": "MIT",
   "type": "module",
+  "scripts": {
+    "dev": "nodemon server"
+  },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "excel4node": "^1.7.2",
+    "express": "^4.17.1",
     "puppeteer": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }

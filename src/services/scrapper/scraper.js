@@ -16,8 +16,6 @@ export const searchInPage = async (page, options) => {
 
             var currentPage = await page.$eval(options.currentPaginationWay, el => el.innerText)
 
-            console.log(currentPage)
-
             if(currentPage < pages) {
                 await page.$eval(options.currentPaginationWay, el => el.nextElementSibling.querySelector('a').click())
                 return

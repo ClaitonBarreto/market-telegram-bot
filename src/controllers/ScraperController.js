@@ -6,9 +6,9 @@ const ScraperController = {
 
     index: async (req,res) => {
         
-        var response = [], url = ''
+        var url = ''
         const { search, market, pages } = req.params
-        const { AMAZON_URL, ML_URL } = process.env
+        const { AMAZON_URL, ML_URL, BROWSER } = process.env
 
         var options
         switch(market) {
@@ -37,12 +37,18 @@ const ScraperController = {
                 }
                 break
             default:
-                return false
+                res.json({
+                    error: true,
+                    code: 1001,
+                    message: 'Market place não reconhecido'
+                })
+                res.end()
+                return
         }
 
         const browser = await puppeteer.launch({
             headless: false,
-            product: 'chrome'
+            product: BROWSER
         })
         const page = await browser.newPage()
         await page.goto(url)

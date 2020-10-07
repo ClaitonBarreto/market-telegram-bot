@@ -7,7 +7,7 @@ const ScraperController = {
     index: async (req,res) => {
         
         var response = [], url = ''
-        const { search, market } = req.params
+        const { search, market, pages } = req.params
         const { AMAZON_URL, ML_URL } = process.env
 
         var options
@@ -19,7 +19,9 @@ const ScraperController = {
                     searchText: search,
                     productWay: 'div > span > div > div.a-spacing-medium',
                     productNameWay: 'span.a-text-normal',
-                    productPriceWay: '.a-price-whole'
+                    productPriceWay: '.a-price-whole',
+                    currentPaginationWay: '.a-selected',
+                    pages
                 }
                 break
             case 'mercado_livre':
@@ -29,7 +31,9 @@ const ScraperController = {
                     searchText: search,
                     productWay: '.andes-card',
                     productNameWay: '.ui-search-item__title',
-                    productPriceWay: '.price-tag-fraction'
+                    productPriceWay: '.price-tag-fraction',
+                    currentPaginationWay: '.andes-pagination__button--current',
+                    pages
                 }
                 break
             default:

@@ -4,6 +4,6 @@ import ScraperController from './src/controllers/ScraperController.js'
 const app = express()
 dotenv.config()
 
-app.get('/:market/:search', ScraperController.index)
+app.get('/:market/:search/:pages?', ScraperController.index)
 
 app.listen(3000)

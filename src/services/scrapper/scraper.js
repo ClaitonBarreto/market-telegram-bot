@@ -1,15 +1,30 @@
 export const searchInPage = async (page, options) => {
-    console.log("AQUI")
+
+    var response = []
+    const { pages } = options
+
     return new Promise( async (resolve, reject) => {
         await page.focus(options.inputSearchWay)
         await page.keyboard.type(options.searchText)
         await page.keyboard.press("Enter")
 
         await page.on('load', async () => {
-            getResultFromPage(page, options)
-            .then((data) => {
-                resolve(data)
-            })
+            
+            var pageResult = await getResultFromPage(page, options)
+
+            response = response.concat(pageResult)
+
+            var currentPage = await page.$eval(options.currentPaginationWay, el => el.innerText)
+
+            console.log(currentPage)
+
+            if(currentPage < pages) {
+                await page.$eval(options.currentPaginationWay, el => el.nextElementSibling.querySelector('a').click())
+                return
+            }
+
+            resolve(response)
+                
         })
     })
     
@@ -17,7 +32,7 @@ export const searchInPage = async (page, options) => {
 
 const getResultFromPage = async (page, options) => {
         
-    console.log(options)
+    
     const result = await page.evaluate((options) => {
         const products = []
         document.querySelectorAll(options.productWay)

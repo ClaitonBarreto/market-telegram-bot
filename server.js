@@ -1,9 +1,5 @@
-import express from 'express'
 import dotenv from 'dotenv'
-import ScraperController from './src/controllers/ScraperController.js'
-const app = express()
+import * as BotController from './src/controllers/BotController.js'
 dotenv.config()
 
-app.get('/:market/:search/:pages?', ScraperController.index)
-
-app.listen(3000)
+BotController.init()

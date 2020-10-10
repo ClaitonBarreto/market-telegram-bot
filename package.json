@@ -5,7 +5,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "nodemon server"
+    "dev": "nodemon server",
+    "start": "node server"
   },
   "dependencies": {
     "axios": "^0.20.0",
